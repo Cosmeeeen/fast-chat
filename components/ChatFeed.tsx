@@ -7,48 +7,10 @@ import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import { CircleArrowDown } from 'lucide-react';
 
-const mockMessages = [
-  {
-    message: 'Hello world',
-    isCurrentUser: false,
-  },
-  {
-    message: 'Hello world',
-    isCurrentUser: true,
-  },
-  {
-    message: 'Hello world',
-    isCurrentUser: false,
-  },
-  {
-    message: 'Hello world',
-    isCurrentUser: true,
-  },
-  {
-    message: 'Hello world',
-    isCurrentUser: false,
-  },
-  {
-    message: 'Hello world',
-    isCurrentUser: true,
-  },
-  {
-    message: 'Hello world',
-    isCurrentUser: false,
-  },
-  {
-    message: 'Hello world',
-    isCurrentUser: true,
-  },
-  {
-    message: 'Hello world',
-    isCurrentUser: false,
-  },
-  {
-    message: 'Hello world',
-    isCurrentUser: true,
-  },
-];
+const mockMessages = Array.from({ length: 100 }, (_, index) => ({
+  message: 'Hello world',
+  isCurrentUser: index % 2 === 0,
+}));
 
 type ChatFeedProps = {};
 
