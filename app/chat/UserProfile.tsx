@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { LoaderCircle } from 'lucide-react';
+import Image from 'next/image';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { type User } from '@supabase/supabase-js';
@@ -17,28 +18,11 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 
-import { createClient } from '../utils/supabase/client';
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+import { useUser } from '@/context/supabase';
 
 export default function UserProfile({ className }: { className?: string }) {
-  const supabase = createClient();
-  const [user, setUser] = React.useState<User | null>(null);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    supabase.auth
-      .getSession()
-      .then(({ data: { session } }) => {
-        setUser(session?.user ?? null);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setUser(null);
-        console.error(err);
-        setLoading(false);
-      });
-  }, [supabase.auth]);
+  const { user, loading } = useUser();
 
   if (loading) {
     return (

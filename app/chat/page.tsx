@@ -7,14 +7,23 @@ export default async function Home() {
   const {
     data: { user },
   } = await client.auth.getUser();
+  const { data: messages } = await client
+    .from('messages')
+    .select('*')
+    .order('created_at', { ascending: true });
 
   if (!user) {
     redirect('/login');
   }
 
+  const mappedMessages = messages?.map((message) => ({
+    ...message,
+    isCurrentUser: message.sender_id === user.id,
+  }));
+
   return (
     <main className='flex h-screen flex-col items-center justify-between p-2'>
-      <ChatFeed />
+      <ChatFeed initialMessages={mappedMessages || []} />
     </main>
   );
 }

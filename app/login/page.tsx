@@ -32,7 +32,6 @@ const SignIn = async () => {
     if (error) {
       console.error(error);
     } else if (data.url) {
-      console.log(data.url);
       redirect(data.url);
     }
   };

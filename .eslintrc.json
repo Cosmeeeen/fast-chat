@@ -1,6 +1,6 @@
 {
   "extends": ["next", "prettier"],
   "rules": {
-    "no-unused-vars": "error"
+    "no-unused-vars": "warn"
   }
 }

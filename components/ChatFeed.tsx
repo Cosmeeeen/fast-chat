@@ -8,18 +8,18 @@ import ChatInput from './ChatInput';
 import { ArrowLeft, CircleArrowDown } from 'lucide-react';
 import UserProfile from '@/app/chat/UserProfile';
 import Link from 'next/link';
+import { Tables } from '@/types/supabase';
 
-const mockMessages = Array.from({ length: 100 }, (_, index) => ({
-  message: 'Hello world',
-  isCurrentUser: index % 2 === 0,
-}));
+type ChatFeedProps = {
+  initialMessages?: (Tables<'messages'> & { isCurrentUser: boolean })[];
+};
 
-type ChatFeedProps = {};
-
-const ChatFeed = ({ ...rest }: ChatFeedProps) => {
+const ChatFeed = ({ initialMessages, ...rest }: ChatFeedProps) => {
   const chatFeedRef = React.useRef<HTMLOListElement>(null);
 
-  const [messages, setMessages] = React.useState(mockMessages);
+  const [messages, setMessages] = React.useState<
+    (Tables<'messages'> & { isCurrentUser: boolean })[]
+  >(initialMessages ?? []);
   const [showScrollToBottom, setShowScrollToBottom] = React.useState(false);
   const [autoScrollPaused, setAutoScrollPaused] = React.useState(false);
 
@@ -53,19 +53,12 @@ const ChatFeed = ({ ...rest }: ChatFeedProps) => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  const handleSendMessage = React.useCallback(
-    (message: string) => {
-      setAutoScrollPaused(false);
-      setMessages([
-        ...messages,
-        {
-          message,
-          isCurrentUser: true,
-        },
-      ]);
-    },
-    [messages]
-  );
+  const handleSendMessage = React.useCallback((message: string) => {
+    setAutoScrollPaused(false);
+
+    //todo send message
+    console.log(message);
+  }, []);
 
   return (
     <Card className='relative h-full w-full overflow-hidden md:w-1/2 2xl:w-1/4'>
@@ -91,18 +84,9 @@ const ChatFeed = ({ ...rest }: ChatFeedProps) => {
             onClick={() => scrollToBottom(true)}
           />
         )}
-        {/* Messges will go below */}
-        <ChatMessage message={'This is the first messaage'} />
         {messages.map((message, index) => {
-          return (
-            <ChatMessage
-              key={index}
-              message={message.message}
-              isCurrentUser={message.isCurrentUser}
-            />
-          );
+          return <ChatMessage key={index} message={message} />;
         })}
-        <ChatMessage message={'This is the last messaage'} />
       </ol>
       <ChatInput
         className='absolute bottom-2 z-10'
