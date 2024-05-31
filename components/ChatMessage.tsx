@@ -9,19 +9,20 @@ type ChatMessageProps = {
 const ChatMessage = ({ message, isCurrentUser, ...rest }: ChatMessageProps) => {
   if (isCurrentUser) {
     return (
-      <Card className='w-fit max-w-[75%] self-end' {...rest}>
-        <p className='break-words p-2'>{message}</p>
-      </Card>
+      <li className='w-fit max-w-[75%] self-end' {...rest}>
+        <Card>
+          <p className='break-words p-2'>{message}</p>
+        </Card>
+      </li>
     );
   }
 
   return (
-    <Card
-      className='w-fit max-w-[75%] bg-primary text-primary-foreground'
-      {...rest}
-    >
-      <p className='p-2'>{message}</p>
-    </Card>
+    <li className='w-fit max-w-[75%] ' {...rest}>
+      <Card className='bg-primary text-primary-foreground'>
+        <p className='p-2'>{message}</p>
+      </Card>
+    </li>
   );
 };
 
