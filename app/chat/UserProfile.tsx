@@ -5,7 +5,6 @@ import { LoaderCircle } from 'lucide-react';
 import Image from 'next/image';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { type User } from '@supabase/supabase-js';
 import { cn } from '@/lib/utils';
 import {
   Drawer,
@@ -19,19 +18,28 @@ import {
 } from '@/components/ui/drawer';
 
 import { Button } from '@/components/ui/button';
-import { useUser } from '@/context/supabase';
+import { useUser } from '@/context/users';
+import { createClient } from '../utils/supabase/client';
+import { useRouter } from 'next/navigation';
 
 export default function UserProfile({ className }: { className?: string }) {
-  const { user, loading } = useUser();
+  const user = useUser((state) => state.user);
+  const router = useRouter();
 
-  if (loading) {
+  if (!user) {
     return (
       <LoaderCircle
-        size={32}
+        size={24}
         className={cn('h-16 w-16 animate-spin', className)}
       />
     );
   }
+
+  const handleSignout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.refresh();
+  };
 
   return (
     <Drawer>
@@ -67,7 +75,9 @@ export default function UserProfile({ className }: { className?: string }) {
             className='mx-auto rounded-full'
           />
           <DrawerFooter>
-            <Button variant='destructive'>Sign Out</Button>
+            <Button variant='destructive' onClick={handleSignout}>
+              Sign Out
+            </Button>
             <DrawerClose asChild>
               <Button variant='outline'>Cancel</Button>
             </DrawerClose>

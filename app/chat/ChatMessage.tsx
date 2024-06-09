@@ -1,19 +1,24 @@
 'use client';
 
 import * as React from 'react';
-import { Card } from './ui/card';
+import { Card } from '../../components/ui/card';
 import { Tables } from '@/types/supabase';
+import { useUser } from '@/context/users';
 
 type ChatMessageProps = {
-  message: Tables<'messages'> & { isCurrentUser: boolean };
+  message: Tables<'messages'>;
 };
 
 const ChatMessage = ({ message, ...rest }: ChatMessageProps) => {
-  if (message.isCurrentUser) {
+  const user = useUser((state) => state.user);
+
+  const isCurrentUser = message.sender_id === user?.id;
+
+  if (isCurrentUser) {
     return (
       <li className='w-fit max-w-[75%] self-end' {...rest}>
         <Card>
-          <p className='break-words p-2'>{JSON.stringify(message)}</p>
+          <p className='break-words p-2'>{message.text}</p>
         </Card>
       </li>
     );
@@ -22,7 +27,7 @@ const ChatMessage = ({ message, ...rest }: ChatMessageProps) => {
   return (
     <li className='w-fit max-w-[75%] ' {...rest}>
       <Card className='bg-primary text-primary-foreground'>
-        <p className='break-words p-2'>{JSON.stringify(message)}</p>
+        <p className='break-words p-2'>{message.text}</p>
       </Card>
     </li>
   );

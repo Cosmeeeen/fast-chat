@@ -2,25 +2,47 @@ import * as React from 'react';
 import { Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-import { Input } from './ui/input';
-import { Button } from './ui/button';
+import { Input } from '../../components/ui/input';
+import { Button } from '../../components/ui/button';
+import { useUser } from '@/context/users';
+import { createClient } from '@/app/utils/supabase/client';
 
 type ChatInputProps = {
   className?: string;
-  onMessageSent: (message: string) => void;
+  onMessageSent?: () => void;
 };
 
 const ChatInput = ({ className, onMessageSent }: ChatInputProps) => {
+  const user = useUser((state) => state.user);
+  const supabase = createClient();
+
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [message, setMessage] = React.useState('');
 
-  const handleSend = React.useCallback(() => {
-    if (message) {
-      onMessageSent(message);
-      setMessage('');
+  const handleSend = React.useCallback(async () => {
+    if (!message || !user) {
+      return;
     }
+
+    const newMessage = {
+      text: message,
+      sender_id: user?.id,
+    };
+
+    setMessage('');
+    const { error } = await supabase
+      .from('messages')
+      .insert(newMessage)
+      .select();
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    onMessageSent?.();
     inputRef.current?.focus();
-  }, [message, onMessageSent]);
+  }, [supabase, user, onMessageSent, message]);
 
   const handleKeyDown = React.useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
