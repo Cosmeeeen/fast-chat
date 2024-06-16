@@ -70,7 +70,7 @@ const MessageList = () => {
 
           const newMessage = {
             ...payload.new,
-            user: data as Tables<'users'>,
+            users: data as Tables<'users'>,
           };
 
           addMessage(newMessage as unknown as Tables<'messages'>);
@@ -121,7 +121,15 @@ const MessageList = () => {
         </div>
       )}
       {messages.map((message, index) => {
-        return <ChatMessage key={index} message={message} />;
+        const firstOfUser =
+          index === 0 || messages[index - 1].sender_id !== message.sender_id;
+        return (
+          <ChatMessage
+            key={index}
+            message={message}
+            firstOfUser={firstOfUser}
+          />
+        );
       })}
     </ol>
   );
