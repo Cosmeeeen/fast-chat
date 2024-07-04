@@ -82,7 +82,7 @@ const ChatMessage = ({
         )}
         <div
           className={cn(
-            'flex w-1/2 items-center justify-start',
+            'flex w-full items-center justify-start',
             isCurrentUser ? 'flex-row-reverse justify-end' : null
           )}
         >

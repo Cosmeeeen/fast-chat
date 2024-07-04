@@ -20,12 +20,12 @@ const ChatInput = ({ className, onMessageSent }: ChatInputProps) => {
   const [message, setMessage] = React.useState('');
 
   const handleSend = React.useCallback(async () => {
-    if (!message || !user) {
+    if (!message.trim() || !user || message.length > 500) {
       return;
     }
 
     const newMessage = {
-      text: message,
+      text: message.trim(),
       sender_id: user?.id,
     };
 
@@ -53,15 +53,30 @@ const ChatInput = ({ className, onMessageSent }: ChatInputProps) => {
     [handleSend]
   );
 
+  const handleInputChange = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.value.length > 500) {
+        setMessage(e.target.value.slice(0, 500));
+        return;
+      }
+      setMessage(e.target.value);
+    },
+    []
+  );
+
   return (
     <div
       className={cn('flex w-full gap-2 px-2', className)}
       onSubmit={handleSend}
     >
       <Input
-        className='bg-background'
+        className={cn(
+          'bg-background',
+          message.length >= 500 &&
+            'border-destructive focus-visible:ring-destructive'
+        )}
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         ref={inputRef}
       />
