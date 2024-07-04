@@ -48,6 +48,7 @@ const ChatMessage = ({
   const isCurrentUser = message.sender_id === user?.id;
   const userPicture = message.users?.avatar_url;
   const userName = message.users?.display_name;
+  const shouldRenderImage = !isCurrentUser && firstOfUser;
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -65,20 +66,18 @@ const ChatMessage = ({
       )}
       {...rest}
     >
-      {!isCurrentUser && (
+      {shouldRenderImage && (
         <Image
           src={userPicture || defaultPicture}
           width={64}
           height={64}
           alt=''
-          className={cn(
-            'h-14 w-14 rounded-full',
-            !firstOfUser ? 'opacity-0' : null
-          )}
+          className='h-14 w-14 rounded-full'
         />
       )}
+      {!shouldRenderImage && !isCurrentUser && <div className='w-14' />}
       <div className='flex flex-col'>
-        {!isCurrentUser && firstOfUser && (
+        {shouldRenderImage && (
           <p className='self-start text-muted-foreground'>{userName}</p>
         )}
         <div
