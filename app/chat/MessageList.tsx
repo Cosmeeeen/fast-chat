@@ -109,7 +109,7 @@ const MessageList = () => {
       {showScrollToBottom && (
         <CircleArrowDown
           size={32}
-          className='absolute left-0 right-0 top-24 mx-auto rounded-full hover:bg-accent hover:text-accent-foreground'
+          className='absolute left-0 right-0 top-24 z-10 mx-auto rounded-full bg-background hover:bg-accent hover:text-accent-foreground'
           onClick={() => scrollToBottom()}
         />
       )}

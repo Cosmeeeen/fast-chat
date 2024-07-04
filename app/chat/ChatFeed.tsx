@@ -10,6 +10,8 @@ import Link from 'next/link';
 import { createClient } from '@/app/utils/supabase/client';
 import { useMessage } from '@/context/messages';
 import MessageList from './MessageList';
+import moment from 'moment';
+import DateAndTime from '@/components/DateAndTime';
 
 const ChatFeed = () => {
   const supabase = createClient();
@@ -32,13 +34,14 @@ const ChatFeed = () => {
 
   return (
     <Card className='relative h-full w-full overflow-hidden md:w-1/2 2xl:w-1/4'>
-      <div className='absolute flex h-20 w-full items-center justify-between border-b-[1px] bg-background p-2'>
+      <div className='absolute z-10 flex h-20 w-full items-center justify-between border-b-[1px] bg-background p-2'>
         <Link
           className='cursor-pointer rounded p-2 transition-all hover:bg-accent hover:text-accent-foreground'
           href='/'
         >
           <ArrowLeft size={32} />
         </Link>
+        <DateAndTime />
         <UserProfile />
       </div>
       {loadingMessages ? (

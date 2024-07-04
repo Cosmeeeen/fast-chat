@@ -21,10 +21,17 @@ import { Button } from '@/components/ui/button';
 import { useUser } from '@/context/users';
 import { createClient } from '../utils/supabase/client';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
+import { resolve } from 'path';
 
 export default function UserProfile({ className }: { className?: string }) {
   const user = useUser((state) => state.user);
   const router = useRouter();
+  const { setTheme, resolvedTheme } = useTheme();
+
+  const handleThemeSwitch = React.useCallback(() => {
+    setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
+  }, [setTheme, resolvedTheme]);
 
   if (!user) {
     return (
@@ -75,12 +82,15 @@ export default function UserProfile({ className }: { className?: string }) {
             className='mx-auto rounded-full'
           />
           <DrawerFooter>
-            <Button variant='destructive' onClick={handleSignout}>
-              Sign Out
+            <Button variant='outline' onClick={handleThemeSwitch}>
+              {resolvedTheme === 'light' ? 'Dark' : 'Light'} mode
             </Button>
             <DrawerClose asChild>
               <Button variant='outline'>Cancel</Button>
             </DrawerClose>
+            <Button variant='destructive' onClick={handleSignout}>
+              Sign Out
+            </Button>
           </DrawerFooter>
         </div>
       </DrawerContent>
