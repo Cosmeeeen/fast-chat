@@ -24,10 +24,11 @@ const ChatFeed = () => {
       return await supabase
         .from('messages')
         .select('*,users(*)')
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: false })
+        .limit(3);
     }
     fetchData().then(({ data: messages }) => {
-      useMessage.setState({ messages: messages || [] });
+      useMessage.setState({ messages: messages?.reverse() || [] });
       setLoadingMessages(false);
     });
   }, [supabase]);

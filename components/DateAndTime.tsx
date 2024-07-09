@@ -2,12 +2,13 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
 export default function DateAndTime() {
-  const [currentDate, setCurrentDate] = useState(
-    moment().format('MMMM Do YYYY')
-  );
-  const [currentTime, setCurrentTime] = useState(moment().format('h:mm:ss a'));
+  const [currentDate, setCurrentDate] = useState('');
+  const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
+    setCurrentDate(moment().format('MMMM Do YYYY'));
+    setCurrentTime(moment().format('h:mm:ss a'));
+
     const interval = setInterval(() => {
       setCurrentDate(moment().format('MMMM Do YYYY'));
       setCurrentTime(moment().format('h:mm:ss a'));
